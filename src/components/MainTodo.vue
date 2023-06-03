@@ -3,12 +3,53 @@ import { ref } from 'vue';
 const todoRef = ref('');
 const todoListRef = ref([]);
 
+//LocalStorageにTodoListがあれば、データを読みだす
 const ls = localStorage.todoList;
 todoListRef.value = ls ? JSON.parse(ls) : [];
+
+const isEditRef = ref(false); //編集状態＝True
+
+let editId = -1;
 
 const addTodo = () => {
   const id = new Date().getTime();
   todoListRef.value.push({ id: id, task: todoRef.value });
+  localStorage.todoList = JSON.stringify(todoListRef.value);
+  todoRef.value = '';
+};
+
+const showTodo = (id) => {
+  isEditRef.value = true; //編集状態をTrueに
+  const todo = todoListRef.value.find((todo) => todo.id === id);
+  todoRef.value = todo.task;
+  editId = id;
+};
+
+const editTodo = () => {
+  const todo = todoListRef.value.find((todo) => todo.id === editId);
+  const idx = todoListRef.value.findIndex((todo) => todo.id === editId);
+  todo.task = todoRef.value;
+  todoListRef.value.splice(idx, 1, todo);
+  localStorage.todoList = JSON.stringify(todoListRef.value);
+  isEditRef.value = false; //編集状態をfalseに
+  todoRef.value = '';
+  editIndex = -1;
+};
+
+const cancelEdit = () => {
+  todoRef.value = '';
+  isEditRef.value = false;
+  editIndex = -1;
+};
+
+const deleteTodo = (id) => {
+  const todo = todoListRef.value.find((todo) => todo.id === id);
+  const idx = todoListRef.value.findIndex((todo) => todo.id === id);
+
+  const delMsg = '「' + todo.task + '」を削除しますか？';
+  if (!confirm(delMsg)) return;
+
+  todoListRef.value.splice(idx, 1);
   localStorage.todoList = JSON.stringify(todoListRef.value);
 };
 </script>
@@ -21,7 +62,9 @@ const addTodo = () => {
       v-model="todoRef"
       placeholder="+ TODOを入力"
     />
-    <button class="btn" @click="addTodo">追加</button>
+    <button class="btn" @click="addTodo" v-show="!isEditRef">追加</button>
+    <button class="btn green" @click="editTodo" v-show="isEditRef">変更</button>
+    <button class="btn pink" @click="cancelEdit">中止</button>
   </div>
   <div class="box_list">
     <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
@@ -29,8 +72,8 @@ const addTodo = () => {
         <input type="checkbox" class="check" /><label>{{ todo.task }}</label>
       </div>
       <div class="btns">
-        <button class="btn green">編</button>
-        <button class="btn pink">削</button>
+        <button class="btn green" @click="showTodo(todo.id)">編</button>
+        <button class="btn pink" @click="deleteTodo(todo.id)">削</button>
       </div>
     </div>
   </div>
@@ -52,6 +95,7 @@ const addTodo = () => {
 
 .btn {
   padding: 8px;
+  margin: 0 4px 0 0;
   background-color: #03a9f4;
   border-radius: 6px;
   color: #fff;

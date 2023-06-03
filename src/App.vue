@@ -20,7 +20,7 @@ import TheFooter from './components/TheFooter.vue';
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  width: 370px;
+  width: 410px;
   margin: 0 auto;
   font-family: sans-serif;
 }
