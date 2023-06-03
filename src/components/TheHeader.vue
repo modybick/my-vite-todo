@@ -5,7 +5,7 @@
 <style scoped>
 .title {
   width: 100%;
-  background-color: rgb(171, 213, 230);
+  background-color: #03a9f4;
   text-align: center;
   font-size: 32px;
   font-weight: bold;
