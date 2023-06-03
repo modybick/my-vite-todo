@@ -35,6 +35,10 @@ const deleteTodo = (id) => {
 const changeCheck = (id) => {
   check(id);
 };
+
+const filterCheckedTodo = (checked) => {
+  return todoListRef.value.filter((todo) => todo.checked === checked);
+};
 </script>
 
 <template>
@@ -50,9 +54,36 @@ const changeCheck = (id) => {
     <button class="btn pink" @click="cancelEdit">中止</button>
   </div>
   <div class="box_list">
-    <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
-      <div class="todo">
-        <input type="checkbox" class="check" /><label>{{ todo.task }}</label>
+    <div
+      class="todo_list"
+      v-for="todo in filterCheckedTodo(false)"
+      :key="todo.id"
+    >
+      <div class="todo" :class="{ fin: todo.checked }">
+        <input
+          type="checkbox"
+          class="check"
+          @change="changeCheck(todo.id)"
+          :checked="todo.checked"
+        /><label>{{ todo.task }}</label>
+      </div>
+      <div class="btns">
+        <button class="btn green" @click="showTodo(todo.id)">編</button>
+        <button class="btn pink" @click="deleteTodo(todo.id)">削</button>
+      </div>
+    </div>
+    <div
+      class="todo_list"
+      v-for="todo in filterCheckedTodo(true)"
+      :key="todo.id"
+    >
+      <div class="todo" :class="{ fin: todo.checked }">
+        <input
+          type="checkbox"
+          class="check"
+          @change="changeCheck(todo.id)"
+          :checked="todo.checked"
+        /><label>{{ todo.task }}</label>
       </div>
       <div class="btns">
         <button class="btn green" @click="showTodo(todo.id)">編</button>
@@ -123,5 +154,11 @@ const changeCheck = (id) => {
 
 .pink {
   background-color: #ff4081;
+}
+
+.fin {
+  text-decoration: line-through;
+  background-color: #ddd;
+  color: #777;
 }
 </style>
