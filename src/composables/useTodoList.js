@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 //LocalStorageにTodoListがあれば、データを読みだす
 
@@ -61,5 +61,18 @@ export const useTodoList = (id) => {
     localStorage.todoList = JSON.stringify(todoListRef.value);
   };
 
-  return { todoListRef, add, show, edit, del, check };
+  const countFin = computed(() => {
+    const finArr = todoListRef.value.filter((todo) => todo.checked);
+    return finArr.length;
+  });
+
+  return {
+    todoListRef,
+    add,
+    show,
+    edit,
+    del,
+    check,
+    countFin,
+  };
 };
