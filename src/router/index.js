@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainTodo from '/src/pages/MainTodo.vue';
+import About from '/src/pages/About.vue';
+import NotFound from '/src/pages/NotFound.vue';
 
 const routes = [
   {
@@ -8,9 +10,14 @@ const routes = [
     component: MainTodo,
   },
   {
-    path: '/MainTodo',
-    name: 'MainTodo',
-    component: MainTodo,
+    path: '/about',
+    name: 'About',
+    component: About,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
   },
 ];
 
