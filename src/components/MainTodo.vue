@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useTodoList } from '/src/composables/useTodoList.js';
+import BaseButton from '/src/components/BaseButton.vue';
 
 const todoRef = ref('');
 const isEditRef = ref(false); //編集状態＝True
@@ -49,16 +50,16 @@ const filterCheckedTodo = (checked) => {
       v-model="todoRef"
       placeholder="+ TODOを入力"
     />
-    <button class="btn" @click="addTodo" v-show="!isEditRef">追加</button>
-    <button class="btn green" @click="editTodo" v-show="isEditRef">変更</button>
-    <button class="btn pink" @click="cancelEdit">中止</button>
+    <BaseButton color="blue" @on-click="addTodo" v-show="!isEditRef"
+      >追加</BaseButton
+    >
+    <BaseButton color="green" @on-click="editTodo" v-show="isEditRef"
+      >変更</BaseButton
+    >
+    <BaseButton color="pink" @on-click="cancelEdit">中止</BaseButton>
   </div>
   <div class="box_list">
-    <div
-      class="todo_list"
-      v-for="todo in filterCheckedTodo(false)"
-      :key="todo.id"
-    >
+    <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
       <div class="todo" :class="{ fin: todo.checked }">
         <input
           type="checkbox"
@@ -68,26 +69,8 @@ const filterCheckedTodo = (checked) => {
         /><label>{{ todo.task }}</label>
       </div>
       <div class="btns">
-        <button class="btn green" @click="showTodo(todo.id)">編</button>
-        <button class="btn pink" @click="deleteTodo(todo.id)">削</button>
-      </div>
-    </div>
-    <div
-      class="todo_list"
-      v-for="todo in filterCheckedTodo(true)"
-      :key="todo.id"
-    >
-      <div class="todo" :class="{ fin: todo.checked }">
-        <input
-          type="checkbox"
-          class="check"
-          @change="changeCheck(todo.id)"
-          :checked="todo.checked"
-        /><label>{{ todo.task }}</label>
-      </div>
-      <div class="btns">
-        <button class="btn green" @click="showTodo(todo.id)">編</button>
-        <button class="btn pink" @click="deleteTodo(todo.id)">削</button>
+        <BaseButton color="green" @on-click="showTodo(todo.id)">編</BaseButton>
+        <BaseButton color="pink" @on-click="deleteTodo(todo.id)">削</BaseButton>
       </div>
     </div>
   </div>
@@ -109,16 +92,6 @@ const filterCheckedTodo = (checked) => {
   font-size: 18px;
   border: 1px solid #aaa;
   border-radius: 6px;
-}
-
-.btn {
-  padding: 8px;
-  margin: 0 4px 0 0;
-  background-color: #03a9f4;
-  border-radius: 6px;
-  color: #fff;
-  text-align: center;
-  font-size: 14px;
 }
 
 .box_list {
@@ -150,14 +123,6 @@ const filterCheckedTodo = (checked) => {
 .btns {
   display: flex;
   gap: 4px;
-}
-
-.green {
-  background-color: #00c853;
-}
-
-.pink {
-  background-color: #ff4081;
 }
 
 .fin {
