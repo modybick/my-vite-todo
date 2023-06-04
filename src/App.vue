@@ -1,13 +1,12 @@
 <script setup>
 import TheHeader from './components/TheHeader.vue';
-import MainTodo from './components/MainTodo.vue';
 import TheFooter from './components/TheFooter.vue';
 </script>
 
 <template>
   <div class="wrap">
     <TheHeader>ヘッダー</TheHeader>
-    <main class="main"><MainTodo /></main>
+    <main class="main"><router-view /></main>
     <TheFooter>フッター</TheFooter>
   </div>
 </template>
